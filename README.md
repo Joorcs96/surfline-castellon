@@ -1,55 +1,48 @@
-# 🌊 Surfline Castellón v2.0 AI · Plataforma Local de Previsión
+# 🌊 Surfline Castellón (Surf Forecast AI Local)
 
-Plataforma inteligente de previsión de oleaje adaptada específicamente para las 11 playas de la provincia de Castellón, con motor físico costero (sombra del Cabo de Oropesa), visión por computador en webcams, preavisos con 2 días de antelación y alertas personalizadas por Telegram y WhatsApp.
+Plataforma de previsión de olas y meteorología marina para la costa de Castellón (Grao, Gurugú, Benicàssim, Burriana, Nules, Almenara, Peñíscola, Vinaròs).
 
----
-
-## 📍 Las 11 Playas Monitorizadas
-1. **Planetario** (Grao de Castellón)
-2. **Gurugú** (Castellón)
-3. **Pirámides** (Benicàssim)
-4. **El Palaciet** (Benicàssim)
-5. **Voramar** (Benicàssim · Cámaras Axis 1 y 2)
-6. **La Renegà** (Oropesa del Mar)
-7. **Burriana** (Playa del Arenal)
-8. **Nules** (Espigones)
-9. **Almenara** (Casablanca)
-10. **Peñíscola Norte** (Castillo)
-11. **Vinaròs** (Playa del Fortí)
+Arquitectura **100% Serverless y Coste 0€** con física costera local, soporte PWA offline y automatización diaria mediante GitHub Actions.
 
 ---
 
-## 🚀 Cómo Publicar la Web en GitHub Pages (1 Clic)
+## 📱 Características Principales
 
-1. Entra en tu repositorio: [https://github.com/mralcachofino-cyber/surfline-castellon](https://github.com/mralcachofino-cyber/surfline-castellon)
-2. Ve a **Settings** > **Pages** (en el menú de la izquierda).
-3. En **Branch**, selecciona `main` y la carpeta `/ (root)`.
-4. Pulsa en **Save**.
-5. ¡Listo! En 1 minuto tendrás tu web activa en:  
-   👉 `https://mralcachofino-cyber.github.io/surfline-castellon/`
-
----
-
-## 🔐 Configuración de Secretos en GitHub (Para Alertas Automáticas)
-
-Para que el robot pueda enviar los avisos por Telegram y WhatsApp:
-1. En tu repositorio, ve a **Settings** > **Secrets and variables** > **Actions**.
-2. Pulsa en **New repository secret** y añade:
-   * `TELEGRAM_BOT_TOKEN`: `8650554341:AAF2DNZZcI5MkK2GDgrqC6hrAh6zhL1lFO4`
-   * `TELEGRAM_CHANNEL_ID`: `-1003885396809`
-   * `ADMIN_PHONE`: `+34687688854`
-   * `ADMIN_CALLMEBOT_KEY`: `7360308`
+- **Física Costera Local:** Modelado matemático de azimut de playa, sombras de espigones y refracción para 9 spots de Castellón.
+- **Frontend PWA Instantáneo:** Modo oscuro profesional, Tailwind CSS, Google Material Symbols y Service Worker (`sw.js`).
+- **Resiliencia Móvil:** Carga instantánea cache-first con tolerancia a desconexión y timeouts de red controlados para evitar bloqueos en iOS/Android.
+- **Sesión de Surfista:** Sistema de perfil local sin dependencias de servidores externos para personalizar reportes.
+- **Webcams en Directo:** Soporte para streams HLS (`.m3u8`), YouTube iframes y recarga de imágenes JPEG.
+- **Reporte de Condiciones (`/votar`):** Formulario para calibrar y retroalimentar el modelo de calidad con observaciones reales.
+- **Backend Automatizado:** Script diario en Python (`backend/actualizar_prevision.py`) ejecutado por GitHub Actions que actualiza `historico_olas.csv` y envía alertas por WhatsApp con CallMeBot API.
 
 ---
 
-## 💻 Subir estos archivos a tu GitHub
+## 📂 Estructura del Proyecto
 
-Desde la terminal o consola en esta carpeta:
+```text
+├── .github/workflows/
+│   └── prevision_diaria.yml       # Cron job diario en GitHub Actions
+├── backend/
+│   ├── motor_fisica.py            # Modelado matemático y refracción costera
+│   ├── actualizar_prevision.py    # Descarga Open-Meteo y generación de histórico
+│   └── test_motor_fisica.py       # 27 tests unitarios (100% pass)
+├── app.js                         # Lógica PWA, renderizado y gestión de datos
+├── index.html                     # Dashboard principal responsive
+├── votar.html                     # Formulario de feedback humano
+├── manifest.json                  # Manifiesto para instalación PWA
+├── sw.js                          # Service Worker con caché v2
+├── historico_olas.csv             # Registro de observaciones y condiciones
+├── MASTER_CONTEXT.md              # Contexto de arquitectura y decisiones
+└── .gitignore                     # Exclusiones de control de versiones
+```
+
+---
+
+## 🧪 Pruebas Unitarias
+
+Para ejecutar el banco de pruebas del motor físico:
+
 ```bash
-git init
-git add .
-git commit -m "🚀 Despliegue inicial Surfline Castellon v2.0 AI"
-git branch -M main
-git remote add origin https://github.com/mralcachofino-cyber/surfline-castellon.git
-git push -u origin main
+python -m unittest backend/test_motor_fisica.py
 ```
